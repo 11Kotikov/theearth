@@ -1,7 +1,10 @@
 import * as BABYLON from 'babylonjs';
 
 export function createEarth(scene) {
-    var earth = BABYLON.MeshBuilder.CreateSphere("earthSphere", { diameter: 5.0, segments: 64 }, scene);
+    var earth = BABYLON.MeshBuilder.CreateSphere("earthSphere", {
+        diameter: 5.0,
+        segments: 64,
+    }, scene);
     earth.metadata = {
         radius: 5
     };
@@ -18,23 +21,28 @@ export function createEarth(scene) {
     var earthMat = new BABYLON.StandardMaterial("earthMat", scene)
     // Load textures
     var earthTexture = new BABYLON.Texture("/textures/earth_4096.png", scene)
-    earthMat.diffuseTexture = earthTexture;
+    earthMat.diffuseTexture = earthTexture;    
     var earthNormalTexture = new BABYLON.Texture("/textures/earthNormal.jpg", scene);
     earthMat.bumpTexture = earthNormalTexture;
-    // Adjust specular color and power to increase shininess
-    earthMat.specularColor = new BABYLON.Color3(1, 1, 1); // White specular color
-    earthMat.specularPower = 64; // Higher value for more shininess
-    earthMat.emissiveColor = new BABYLON.Color3(0.05, 0.2, 0.31);
-    // Assign core material to sphere
-    earth.material = earthMat;
     // Flip the texture vertically
     earthTexture.vScale = -1;
-    earthNormalTexture.vScale = -1;
-    earthNormalTexture.vScale = -1; // Flip vertically
-    earthNormalTexture.uScale = -1; // Flip horizontally
+    earthTexture.uScale = -1;
+    earthNormalTexture.vScale = -1; 
+    earthNormalTexture.uScale = 1; 
+    // Adjust specular color and power to increase shininess
+    earthMat.specularColor = new BABYLON.Color3(1, 1, 1); // White specular color
+    earthMat.specularPower = 10; // Higher value for more shininess
+    // Assign core material to sphere
+    earth.material = earthMat;
 
+    var earthAxis = new BABYLON.Vector3(Math.sin(23 * -Math.PI/180), Math.cos(23 * -Math.PI/180), 0);
+    var angle = 0.01;
 
+    
 
+    // scene.registerBeforeRender(function() {
+    //     earth.rotate(earthAxis, angle, BABYLON.Space.WORLD);
+    // })
     
     return earth;
 }

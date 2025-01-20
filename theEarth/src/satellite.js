@@ -35,6 +35,10 @@ export function createOrbitPivot(scene) {
     // Создаем невидимый pivot для орбиты
     const pivot = new BABYLON.TransformNode("pivot", scene);
     pivot.position = BABYLON.Vector3.Zero(); // Центр Земли
+
+    // Поворачиваем pivot, чтобы задать наклон орбиты
+    pivot.rotation.z = BABYLON.Tools.ToRadians(30);
+
     return pivot;
 }
 
@@ -42,7 +46,7 @@ export function animateSatellite(scene, pivot) {
     let angle = 0; // Начальный угол орбиты
     scene.registerBeforeRender(() => {
         // Увеличиваем угол для плавного движения
-        angle += 0.01;
+        angle -= 0.01;
 
         // Вращаем pivot вокруг центра Земли
         pivot.rotation.y = angle;
@@ -62,5 +66,6 @@ export async function initializeSattelite(scene) {
     if (satellite) {
         satellite.parent = pivot; // Присоединяем спутник к pivot
         animateSatellite(scene, pivot);
+        return satellite; // Возвращаем объект спутника для привязки камеры
     }
 }
